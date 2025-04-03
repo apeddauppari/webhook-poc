@@ -2,7 +2,7 @@
 webhook configuration to mount pv for pod access on azure Kubernetes 
 
 # Resource Webhook
-Refer to this [Readme.md]([https://github.com/adityajoshi12/kubernetes-development/tree/main/mutating-webhook](https://github.com/adityajoshi12/kubernetes-development/tree/main/mutating-webhook)) to create client and server certificates.
+Refer to this [Readme.md](https://github.com/adityajoshi12/kubernetes-development/tree/main/mutating-webhook) to create client and server certificates.
 
 ### TLS Certs
 #### CA Certificates
