@@ -11,13 +11,10 @@ RUN pip install flask
 COPY webhook-server.py .
 
 # Copy TLS certificates
-# COPY ./webhook.crt /certs/tls.crt
-# COPY ./webhook.key /certs/tls.key
-COPY server.pem /certs/tls.crt
-COPY server-key.pem /certs/tls.key
+COPY tls.crt /certs/tls.crt
+COPY tls.key /certs/tls.key
 
-# Expose port 443
-EXPOSE 443
+EXPOSE 8080
 
 # Command to run the Python application
 CMD ["python", "webhook-server.py"]

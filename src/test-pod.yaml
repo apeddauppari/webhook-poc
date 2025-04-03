@@ -7,13 +7,20 @@ metadata:
     app: test
 spec:
   containers:
-  - name: busybox
-    image: busybox
-    command: ["sleep", "3600"]
+  - name: python-container
+    image: python:3.9
+    command: ["/bin/sh", "-c"]
+    args:
+      - "python3 script.py"
     volumeMounts:
     - name: data-volume
       mountPath: /data
+    - name: local-pv-node0
+      mountPath: /mnt/disk1/data
   volumes:
   - name: data-volume
     persistentVolumeClaim:
       claimName: webhook-pvc
+  - name: local-pv-node0
+    persistentVolumeClaim:
+      claimName: local-pv-node0

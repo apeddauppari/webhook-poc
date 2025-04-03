@@ -1,0 +1,20 @@
+apiVersion: v1 
+kind: PersistentVolume 
+metadata: 
+  name: local-pv-node0 
+spec: 
+  capacity: 
+    storage: 1Ti 
+  accessModes: 
+    - ReadWriteOnce 
+  storageClassName: local-storage 
+  local: 
+    path: /mnt/disk1/data  
+  nodeAffinity: 
+    required: 
+      nodeSelectorTerms: 
+      - matchExpressions: 
+        - key: kubernetes.io/hostname 
+          operator: In 
+          values: 
+          - aks-workerpool-53669451-vmss000000

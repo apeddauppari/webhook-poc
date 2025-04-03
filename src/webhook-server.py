@@ -36,14 +36,12 @@ def mutate():
                     "mountPath": "/mnt/disk1/data",
                     "name": "local-pv-node0"
                 }
-            },
-            {   "op": "add", 
-                "path": "/metadata/labels/webhook-injected", 
-                "value": "true"
             }
         ]
 
         response = {
+            "apiVersion": "admission.k8s.io/v1",
+            "kind": "AdmissionReview",
             "response": {
                 "uid": request_data["request"]["uid"],
                 "allowed": True,
@@ -59,5 +57,5 @@ def mutate():
         return jsonify({"response": {"allowed": False}})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=443, ssl_context=("/certs/tls.crt", "/certs/tls.key"))
+    app.run(host="0.0.0.0", port=8080, ssl_context=("/certs/tls.crt", "/certs/tls.key"))
 

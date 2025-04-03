@@ -1,0 +1,50 @@
+Name:             test-pod
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             <none>
+Labels:           app=test
+Annotations:      <none>
+Status:           Pending
+IP:               
+IPs:              <none>
+Containers:
+  busybox:
+    Image:      busybox
+    Port:       <none>
+    Host Port:  <none>
+    Command:
+      sleep
+      3600
+    Environment:  <none>
+    Mounts:
+      /data from data-volume (rw)
+      /mnt/disk1/data from local-pv-node0 (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-gqbxj (ro)
+Conditions:
+  Type           Status
+  PodScheduled   False 
+Volumes:
+  data-volume:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  webhook-pvc
+    ReadOnly:   false
+  local-pv-node0:
+    Type:       PersistentVolumeClaim (a reference to a PersistentVolumeClaim in the same namespace)
+    ClaimName:  minio-dev/minio-volume-minio-0
+    ReadOnly:   false
+  kube-api-access-gqbxj:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason             Age   From                Message
+  ----     ------             ----  ----                -------
+  Warning  FailedScheduling   20s   default-scheduler   0/8 nodes are available: persistentvolumeclaim "minio-dev/minio-volume-minio-0" not found. preemption: 0/8 nodes are available: 8 Preemption is not helpful for scheduling.
+  Normal   NotTriggerScaleUp  12s   cluster-autoscaler  pod didn't trigger scale-up: 1 max node group size reached

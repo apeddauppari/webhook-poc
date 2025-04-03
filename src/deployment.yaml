@@ -13,26 +13,18 @@ spec:
       labels:
         app: mutationwebhook
     spec:
+      volumes:
+        - name: certs
+          secret:
+            secretName: tls
       containers:
         - name: mutationwebhook
           image: apeddauacr.azurecr.io/mutationwebhook:latest
-          ports:
-          - containerPort: 443
+          imagePullPolicy: Always
           volumeMounts:
           - name: certs
-            mountPath: /certs
-          - name: data-volume
-            mountPath: /data
-          env:
-          - name: CA_BUNDLE
-            value: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUR4RENDQXF5Z0F3SUJBZ0lVRUJDSThyMFFVREhhaklIa0w3VTkwb2FaZTlZd0RRWUpLb1pJaHZjTkFRRUwKQlFBd2FERUxNQWtHQTFVRUJoTUNWVk14RHpBTkJnTlZCQWdUQms5eVpXZHZiakVSTUE4R0ExVUVCeE1JVUc5eQpkR3hoYm1ReEV6QVJCZ05WQkFvVENrdDFZbVZ5Ym1WMFpYTXhDekFKQmdOVkJBc1RBa05CTVJNd0VRWURWUVFECkV3cExkV0psY201bGRHVnpNQjRYRFRJMU1EUXdNakV5TkRVd01Gb1hEVE13TURRd01URXlORFV3TUZvd2FERUwKTUFrR0ExVUVCaE1DVlZNeER6QU5CZ05WQkFnVEJrOXlaV2R2YmpFUk1BOEdBMVVFQnhNSVVHOXlkR3hoYm1ReApFekFSQmdOVkJBb1RDa3QxWW1WeWJtVjBaWE14Q3pBSkJnTlZCQXNUQWtOQk1STXdFUVlEVlFRREV3cExkV0psCmNtNWxkR1Z6TUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF1cWJ5WmZmRWp4QUMKcWpMUXJFM1NlMjJkWE5HWVIyZi9kN2ptNVYwaFJZcmkzZjNhemJ0a09KUGxVTlF3azhtdkJ0MkVCS0VnR0RnSQpRT1l6eW1HWVl3OHJjYUpMU0FaeXhNeC9QSWpIYTUzaG9lR3pNZ0NqWm9ZSGNxdTVVWnFJS1NFaVI2amJhMEI0CjdLMmxiMzhtak13S1NRZm9CUTliWlRva3hlVCtGVEVRMk1HZy9YMXkxVlNscUp6Rld2L0cvNHJOSVBabGVzV1EKR2RGQ0ZXZ3ZVc3Y0WnhjSGh4VmxWNVFFc2RwYW1vNW4zcEFXMVc1Y28yZTlCbnhIRzZLbEhQb1k4Q2hkUE9FdwprQ3JiUmZOZHIyZTh4ZTRDSDV0bDJtam1KbnQzUlc5RWhyKzUzZTNiMjQzbEJSNmVrOXo0MzRkaGFUclBUdFVDCjBacXZ1SDlXT1FJREFRQUJvMll3WkRBT0JnTlZIUThCQWY4RUJBTUNBUVl3RWdZRFZSMFRBUUgvQkFnd0JnRUIKL3dJQkFqQWRCZ05WSFE0RUZnUVUxenkvZVYxZy9LeXQ1NDhvVFBCYzQ4dEU5OVl3SHdZRFZSMGpCQmd3Rm9BVQoxenkvZVYxZy9LeXQ1NDhvVFBCYzQ4dEU5OVl3RFFZSktvWklodmNOQVFFTEJRQURnZ0VCQUM1REFvb3VBd0MwCnU0UHhzZXJITjBVNHNhV1h2RndzVEh0VFBPV0haVElIeVBOUU1hUGEwQXEvZzQvUXN4YlZpQjFsWHhTMlEvU0cKcHhDSXpZM2poT2IxQzF1S1hDWnI3K3VId1c0Z21HVWRacUR6V1lwZC8xWVV5TDJRam0zWFR5WXZVeGxxaCtMcQpWU001RjI4TDNRYVVZcTZqUE9icmQyUW9vYUZFOEE2NVU0NVBsZmt5VmJBTmkyK2F6SDdIY0tXYlJSUVVSM01vCllneUVjdW5rRHE2RWRQaG1vbnFHekdqdkF4ZnJvRUhhQkNpR2J4cEl5NjVQbEo3Tmh6UkltMnFuSkpRS3o5SE0Kb1ZUMlNzTTVJeURrTWdURnF2SWJ6LzY0OTRjM3VVT2xNWlNPVnNSeW9JemY3Qjg5azhNL1V6Y1I2K0UvMmtuQwpmMkYzQXpLWmU1RT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
-      volumes:
-      - name: certs
-        secret:
-          secretName: mutating-certs
-      - name: data-volume
-        persistentVolumeClaim:
-          claimName: webhook-pvc
+            mountPath: /etc/certs
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
@@ -41,7 +33,8 @@ metadata:
   namespace: default
 spec:
   ports:
-  - port: 443
-    targetPort: 443
+  - port: 8080
+    targetPort: 8080
   selector:
     app: mutationwebhook
+  type: ClusterIP
