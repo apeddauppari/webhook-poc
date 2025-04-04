@@ -58,7 +58,7 @@ kubectl apply -f minio-pv.yaml
 kubectl apply -f minio-pvc.yaml
 ```
 
-### Verify Mounted Path with Test Pod
+#### Verify Mounted Path with Test Pod
 Create a test pod to access local mount path /mnt/disk1/data through pvc
 
 ```bash
